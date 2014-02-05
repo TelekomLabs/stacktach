@@ -135,6 +135,10 @@ class Consumer(kombu.mixins.ConsumerMixin):
                       (e, json.loads(str(message.body))))
             raise
 
+    def on_decode_error(self, message, exc):
+        _get_child_logger().exception("Decode Error: %s" % exc)
+        # no NOT call message.ack(), otherwise the message will be lost
+
 
 def continue_running():
     return True
